@@ -17,10 +17,19 @@ No dependencies to install — the standard library is all you need:
 ```bash
 python3 run.py samples/admin-role.yaml
 python3 run.py samples/readonly-role.yaml
+python3 run.py samples/bindings.yaml
 ```
 
 Exit codes: `2` = usage error or unreadable manifest, `1` = at least
 one high or critical finding, `0` = no high or critical findings.
+
+## Day-2 scope
+
+- Effective-access analysis: bindings are resolved to subjects, and
+  any subject bound to a role the day-1 checks flagged CRITICAL or
+  HIGH is reported (`effective-admin` / `effective-privileged`).
+- ServiceAccount token automount: `automountServiceAccountToken: true`
+  is flagged as MEDIUM.
 
 ## Day-1 scope
 

@@ -14,6 +14,7 @@ import sys
 
 from rbac.loader import load_manifests
 from rbac.checks import check_manifests
+from rbac.bindings import check_effective
 from rbac.report import summarize, render_text, render_json
 
 
@@ -26,13 +27,16 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     all_findings = []
+    all_docs = []
     for path in args.manifests:
         try:
             docs = load_manifests(path)
         except (OSError, ValueError) as exc:
             print(f"error: cannot load {path}: {exc}", file=sys.stderr)
             return 2
+        all_docs.extend(docs)
         all_findings.extend(check_manifests(docs))
+    all_findings.extend(check_effective(all_docs))
 
     source = ", ".join(args.manifests)
     if args.json:
